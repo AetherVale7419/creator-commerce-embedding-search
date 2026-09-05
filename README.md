@@ -1,7 +1,5 @@
 # Search creator downloads by meaning
 
-Infrai gives you creator-commerce search with one API key, one bill, and an OpenAI-compatible endpoint. The flow is simple: embed documents, embed the visitor query, rank by meaning, then return the download paths the visitor can access.
-
 ```bash
 npm install
 export INFRAI_API_KEY="your-key"
@@ -30,7 +28,7 @@ This small TypeScript service embeds creator-commerce documents and a visitor's 
 
 The route embeds three ready documents at startup and caches that in-memory index. It then embeds the query, calculates cosine similarity, filters by access, and returns concrete download paths. That shape maps neatly onto a Next.js route handler: keep `creator_search.ts`, move the request boundary into `app/api/search/route.ts`, and replace the sample document array with records from your database.
 
-The main trap is the order of operations for access checks and semantic ranking. A highly similar subscriber update must never appear in a visitor's delivery result, so `rankDeliverableDocuments` removes inaccessible records before sorting and limiting.
+The real gotcha is ordering the access check with semantic ranking. A highly similar subscriber update must never become a visitor's delivery result, so `rankDeliverableDocuments` removes inaccessible records before sorting and limiting.
 
 Expected demo output starts with the subscriber preset pack:
 
